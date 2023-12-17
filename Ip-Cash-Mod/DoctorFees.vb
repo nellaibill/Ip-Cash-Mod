@@ -3,9 +3,9 @@ Imports System.Data.SqlClient
 
 
 Public Class DoctorFees
-    Public xCon As New SqlConnection("Data Source=LAPTOP-C27U7D67\SQLEXPRESS;Initial Catalog=LaskhmiHospital;Integrated Security=True")
-    Public xCon1 As New SqlConnection("Data Source=LAPTOP-C27U7D67\SQLEXPRESS;Initial Catalog=LaskhmiHospital;Integrated Security=True") '
-    Public xCon2 As New SqlConnection("Data Source=LAPTOP-C27U7D67\SQLEXPRESS;Initial Catalog=LaskhmiHospital;Integrated Security=True") '
+    Public xCon As New SqlConnection("Data Source=SERVER\SQLEXPRESS;Initial Catalog=LaskhmiHospital;integrated security=false;user id=sa")
+    Public xCon1 As New SqlConnection("Data Source=SERVER\SQLEXPRESS;Initial Catalog=LaskhmiHospital;integrated security=false;user id=sa")
+    Public xCon2 As New SqlConnection("Data Source=SERVER\SQLEXPRESS;Initial Catalog=LaskhmiHospital;integrated security=false;user id=sa")
     Dim xDoctorFeesByIpNo As Integer = 0
     Dim xBeforeDoctorFeesProcess As Integer = 0
     Dim xAfterDoctorFeesProcess As Integer = 0
@@ -16,119 +16,121 @@ Public Class DoctorFees
     Dim xAfterParticularsFeesProcess As Integer = 0
 
     'Step One Other Doctor Amount to be Show and Process
-    Private Sub btnOtherDoctFeesShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOtherDoctFeesShow.Click
-        Call ShowOtherDoctorFees()
+    Private Sub btnOtherDoctFeesShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'Call ShowOtherDoctorFees()
         Call ShowRoomAmount()
     End Sub
 
-    Private Sub btnOtherDoctorFeesProcess_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOtherDoctorFeesProcess.Click
-        Dim xDoctorFees, xLessAmount As Integer
-        rchDoctorFees.Text = ""
-        rchLessAmount.Text = ""
+    'Private Sub btnOtherDoctorFeesProcess_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    Dim xDoctorFees, xLessAmount As Integer
+    '    rchDoctorFees.Text = ""
+    '    rchLessAmount.Text = ""
 
-        Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
-        & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
-        xCon.Open()
-        Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
-        Dim myreader As SqlDataReader
-        myreader = sqlcmd.ExecuteReader()
-        While myreader.Read()
-            xDoctorFees = 0
-            xLessAmount = 0
-            xDoctorFeesByIpNo = 0
-            Dim xIpNo As String = myreader.Item("ipno").ToString
-            Dim xRecieptDoctorFeesDetailsQry As String = "SELECT sum(doctorfees) as doctorfees FROM ReceiptDoctorFeesDetails WHERE IPNo='" + xIpNo + "' and doctorname!='Dr. Meena' and doctorname!='Dr. Ramalaksmi' and doctorname!='Dr. Laksmanan'"
-            xCon1.Open()
+    '    Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
+    '    & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
+    '    xCon.Open()
+    '    Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
+    '    Dim myreader As SqlDataReader
+    '    myreader = sqlcmd.ExecuteReader()
+    '    While myreader.Read()
+    '        xDoctorFees = 0
+    '        xLessAmount = 0
+    '        xDoctorFeesByIpNo = 0
+    '        Dim xIpNo As String = myreader.Item("ipno").ToString
+    '        Dim xRecieptDoctorFeesDetailsQry As String = "SELECT sum(doctorfees) as doctorfees FROM ReceiptDoctorFeesDetails WHERE IPNo='" + xIpNo + "' and doctorname!='Dr. Meena' and doctorname!='Dr. Ramalaksmi' and doctorname!='Dr. Laksmanan'"
+    '        xCon1.Open()
 
-            Dim sqlcmd1 As New SqlCommand(xRecieptDoctorFeesDetailsQry, xCon1)
-            Dim myreader1 As SqlDataReader
-            myreader1 = sqlcmd1.ExecuteReader()
-            '  If myreader1.HasRows + 1 Then
-            While myreader1.Read()
-                If myreader1.Item("doctorfees").ToString <> String.Empty Then
-                    xDoctorFeesByIpNo = myreader1.Item("doctorfees").ToString
-                End If
-            End While
-            ' End If
-            xCon1.Close()
+    '        Dim sqlcmd1 As New SqlCommand(xRecieptDoctorFeesDetailsQry, xCon1)
+    '        Dim myreader1 As SqlDataReader
+    '        myreader1 = sqlcmd1.ExecuteReader()
+    '        '  If myreader1.HasRows + 1 Then
+    '        While myreader1.Read()
+    '            If myreader1.Item("doctorfees").ToString <> String.Empty Then
+    '                xDoctorFeesByIpNo = myreader1.Item("doctorfees").ToString
+    '            End If
+    '        End While
+    '        ' End If
+    '        xCon1.Close()
 
-            Dim xRecieptDoctorFeesUpdateQry As String = "update ReceiptDoctorFeesDetails set doctorfees =0 WHERE IPNo='" + xIpNo + "' and doctorname!='Dr. Meena' and doctorname!='Dr. Ramalaksmi' and doctorname!='Dr. Laksmanan'"
-            xCon1.Open()
-            Dim sqlcmdRecieptDoctorFeesUpdate As New SqlCommand(xRecieptDoctorFeesUpdateQry, xCon1)
-            Dim myreaderRecieptDoctorFeesUpdate As SqlDataReader
-            myreaderRecieptDoctorFeesUpdate = sqlcmdRecieptDoctorFeesUpdate.ExecuteReader()
-            xCon1.Close()
+    '        Dim xRecieptDoctorFeesUpdateQry As String = "update ReceiptDoctorFeesDetails set doctorfees =0 WHERE IPNo='" + xIpNo + "' and doctorname!='Dr. Meena' and doctorname!='Dr. Ramalaksmi' and doctorname!='Dr. Laksmanan'"
+    '        xCon1.Open()
+    '        Dim sqlcmdRecieptDoctorFeesUpdate As New SqlCommand(xRecieptDoctorFeesUpdateQry, xCon1)
+    '        Dim myreaderRecieptDoctorFeesUpdate As SqlDataReader
+    '        myreaderRecieptDoctorFeesUpdate = sqlcmdRecieptDoctorFeesUpdate.ExecuteReader()
+    '        xCon1.Close()
 
-            Dim xRecieptDetailsLessAmountQry As String = "update  ReceiptDetails set totalexpense=totalexpense-" + xDoctorFeesByIpNo.ToString + " WHERE IPNo='" + xIpNo + "'"
-            xCon1.Open()
-            Dim sqlcmdRecieptDetailsLessAmount As New SqlCommand(xRecieptDetailsLessAmountQry, xCon1)
-            Dim myreaderRecieptDetailsLessAmount As SqlDataReader
-            myreaderRecieptDetailsLessAmount = sqlcmdRecieptDetailsLessAmount.ExecuteReader()
-            xCon1.Close()
-        End While
-        xCon.Close()
-    End Sub
+    '        Dim xRecieptDetailsLessAmountQry As String = "update  ReceiptDetails set totalexpense=totalexpense-" + xDoctorFeesByIpNo.ToString + " WHERE IPNo='" + xIpNo + "'"
+    '        xCon1.Open()
+    '        Dim sqlcmdRecieptDetailsLessAmount As New SqlCommand(xRecieptDetailsLessAmountQry, xCon1)
+    '        Dim myreaderRecieptDetailsLessAmount As SqlDataReader
+    '        myreaderRecieptDetailsLessAmount = sqlcmdRecieptDetailsLessAmount.ExecuteReader()
+    '        xCon1.Close()
+    '    End While
+    '    xCon.Close()
+    'End Sub
 
     'Step Two Less Amount Show and Process
 
-    Private Sub btnLessShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLessShow.Click
-        Dim xLessAmount As Integer
-        rchLessAmount.Text = ""
-        xLessAmount = 0
-        Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
-        & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
+    'Private Sub btnLessShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    Dim xLessAmount As Integer
+    '    rchLessAmount.Text = ""
+    '    xLessAmount = 0
+    '    Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
+    '    & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
 
-        xCon.Open()
-        Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
-        Dim myreader As SqlDataReader
-        myreader = sqlcmd.ExecuteReader()
-        While myreader.Read()
-            Dim xIpNo As String = myreader.Item("ipno").ToString
-            Dim xRecieptDetailsLessAmountQry As String = "SELECT ipno,lessamount FROM ReceiptDetails WHERE IPNo='" + xIpNo + "'  and lessamount>0"
-            xCon1.Open()
-            Dim sqlcmd2 As New SqlCommand(xRecieptDetailsLessAmountQry, xCon1)
-            Dim myreader2 As SqlDataReader
-            myreader2 = sqlcmd2.ExecuteReader()
-            While myreader2.Read()
-                xLessAmount += myreader2.Item("lessamount").ToString
-                rchLessAmount.Text += myreader2.Item("ipno").ToString + "-" + myreader2.Item("lessamount").ToString + Environment.NewLine
-            End While
-            xCon1.Close()
-        End While
-        lblLessAmount.Text = xLessAmount
-        xCon.Close()
-    End Sub
+    '    xCon.Open()
+    '    Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
+    '    Dim myreader As SqlDataReader
+    '    myreader = sqlcmd.ExecuteReader()
+    '    While myreader.Read()
+    '        Dim xIpNo As String = myreader.Item("ipno").ToString
+    '        Dim xRecieptDetailsLessAmountQry As String = "SELECT ipno,lessamount FROM ReceiptDetails WHERE IPNo='" + xIpNo + "'  and lessamount>0"
+    '        xCon1.Open()
+    '        Dim sqlcmd2 As New SqlCommand(xRecieptDetailsLessAmountQry, xCon1)
+    '        Dim myreader2 As SqlDataReader
+    '        myreader2 = sqlcmd2.ExecuteReader()
+    '        While myreader2.Read()
+    '            xLessAmount += myreader2.Item("lessamount").ToString
+    '            rchLessAmount.Text += myreader2.Item("ipno").ToString + "-" + myreader2.Item("lessamount").ToString + Environment.NewLine
+    '        End While
+    '        xCon1.Close()
+    '    End While
+    '    lblLessAmount.Text = xLessAmount
+    '    xCon.Close()
+    'End Sub
 
-    Private Sub btnLessProcess_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLessProcess.Click
-        Dim xDoctorFees, xLessAmount As Integer
-        rchDoctorFees.Text = ""
-        rchLessAmount.Text = ""
+    'Private Sub btnLessProcess_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    Dim xDoctorFees, xLessAmount As Integer
+    '    rchDoctorFees.Text = ""
+    '    rchLessAmount.Text = ""
 
-        Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
-        & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
-        xCon.Open()
-        Dim sqlcmdDischarge As New SqlCommand(xDischargeQry, xCon)
-        Dim myreaderDischarge As SqlDataReader
-        myreaderDischarge = sqlcmdDischarge.ExecuteReader()
-        While myreaderDischarge.Read()
-            xDoctorFees = 0
-            xLessAmount = 0
-            Dim xIpNo As String = myreaderDischarge.Item("ipno").ToString
-            Dim xRecieptDetailsLessAmountUpdateQry As String = "update  ReceiptDetails set lessamount=0  WHERE IPNo='" + xIpNo + "'"
-            xCon1.Open()
-            Dim sqlcmdRecieptDetailsLessAmountUpdate As New SqlCommand(xRecieptDetailsLessAmountUpdateQry, xCon1)
-            Dim myreaderRecieptDetailsLessAmountUpdate As SqlDataReader
-            myreaderRecieptDetailsLessAmountUpdate = sqlcmdRecieptDetailsLessAmountUpdate.ExecuteReader()
-            xCon1.Close()
-        End While
-        xCon.Close()
-    End Sub
+    '    Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
+    '    & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
+    '    xCon.Open()
+    '    Dim sqlcmdDischarge As New SqlCommand(xDischargeQry, xCon)
+    '    Dim myreaderDischarge As SqlDataReader
+    '    myreaderDischarge = sqlcmdDischarge.ExecuteReader()
+    '    While myreaderDischarge.Read()
+    '        xDoctorFees = 0
+    '        xLessAmount = 0
+    '        Dim xIpNo As String = myreaderDischarge.Item("ipno").ToString
+    '        Dim xRecieptDetailsLessAmountUpdateQry As String = "update  ReceiptDetails set lessamount=0  WHERE IPNo='" + xIpNo + "'"
+    '        xCon1.Open()
+    '        Dim sqlcmdRecieptDetailsLessAmountUpdate As New SqlCommand(xRecieptDetailsLessAmountUpdateQry, xCon1)
+    '        Dim myreaderRecieptDetailsLessAmountUpdate As SqlDataReader
+    '        myreaderRecieptDetailsLessAmountUpdate = sqlcmdRecieptDetailsLessAmountUpdate.ExecuteReader()
+    '        xCon1.Close()
+    '    End While
+    '    xCon.Close()
+    'End Sub
 
 
 
     'Step Three Internal Doctor Fees Show and Process 
 
     Private Sub btnInternalFeesShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInternalFeesShow.Click
+        Call ShowRoomAmount()
+
         rchInternalFeesShow.Text = ""
         rchInternalProcessingFeesShow.Text = ""
         rchBeforeDoctorFees.Text = ""
@@ -142,7 +144,7 @@ Public Class DoctorFees
         xBeforeDoctorFeesProcess = 0
         xAfterDoctorFeesProcess = 0
         Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
-        & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
+            & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
         xCon.Open()
         Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
         Dim myreader As SqlDataReader
@@ -164,7 +166,7 @@ Public Class DoctorFees
             xCon1.Close()
             If xReceiptNumber <> "" Then
 
-                Dim xRecieptFeesDetailsQry As String = "SELECT ipno,particulars,Fees, ROUND((Fees - " + xPercentageValue1.ToString + " * Fees) / 25, 0) * 25 AS roundedfees FROM ReceiptFeesDetails WHERE IPNo ='" + xIpNo + "'"
+                Dim xRecieptFeesDetailsQry As String = "SELECT ipno,particulars,Fees, ROUND((Fees - " + xPercentageValue1.ToString + " * Fees) / 25, 0) * 25 AS roundedfees FROM ReceiptFeesDetails WHERE IPNo ='" + xIpNo + "' and Fees>0"
                 xCon1.Open()
 
                 Dim sqlcmd1 As New SqlCommand(xRecieptFeesDetailsQry, xCon1)
@@ -220,142 +222,144 @@ Public Class DoctorFees
 
     Private Sub btnInternalFeesProcess_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInternalFeesProcess.Click
 
-
-        Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to process?", "Internal Process", MessageBoxButtons.YesNo)
+        If result = DialogResult.Yes Then
+            Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
         & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
-        'Dim Adpt As New SqlDataAdapter(com, xCon)
-        xCon.Open()
-        Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
-        Dim myreader As SqlDataReader
-        myreader = sqlcmd.ExecuteReader()
-        While myreader.Read()
-            xFinalDoctorFeesProcess = 0
-            xBeforeDoctorFeesProcess = 0
-            xAfterDoctorFeesProcess = 0
-            xFinalParticularFeesProcess = 0
-            xBeforeParticularsFeesProcess = 0
-            xAfterParticularsFeesProcess = 0
-            Dim xIpNo As String = myreader.Item("ipno").ToString
-            Dim xReceiptNumber As String
-            xReceiptNumber = ""
-            Dim xCheckClaimBillQry As String = "SELECT ReceiptNumber FROM ReceiptDetails WHERE IPNo ='" + xIpNo + "' and claimbill='n'"
-            xCon1.Open()
-            Dim sqlcmdReceiptNumber As New SqlCommand(xCheckClaimBillQry, xCon1)
-            Dim myreaderReceiptNumber As SqlDataReader
-            myreaderReceiptNumber = sqlcmdReceiptNumber.ExecuteReader()
-            While myreaderReceiptNumber.Read()
-                xReceiptNumber = myreaderReceiptNumber.Item("ReceiptNumber").ToString
-            End While
-            xCon1.Close()
-            If xReceiptNumber <> "" Then
-
-                xPercentageValue = txtPercentage.Text.ToString
-                xPercentageValue1 = xPercentageValue / 100
-
-                Dim xRecieptDoctorFeesDetailsQry As String = "SELECT ipno,doctorfees, ROUND((doctorfees - " + xPercentageValue1.ToString + " * doctorfees) / 25, 0) * 25 AS roundeddoctorfees FROM ReceiptDoctorFeesDetails WHERE IPNo ='" + xIpNo + "' and (doctorname='Dr. Meena' OR doctorname='Dr. Ramalaksmi' OR doctorname='Dr. Laksmanan')"
-                xCon1.Open()
-                Dim sqlcmdRecieptDoctorFeesDetails As New SqlCommand(xRecieptDoctorFeesDetailsQry, xCon1)
-                Dim myreaderRecieptDoctorFeesDetails As SqlDataReader
-                myreaderRecieptDoctorFeesDetails = sqlcmdRecieptDoctorFeesDetails.ExecuteReader()
-                While myreaderRecieptDoctorFeesDetails.Read()
-                    xBeforeDoctorFeesProcess += myreaderRecieptDoctorFeesDetails.Item("doctorfees").ToString
-                    xAfterDoctorFeesProcess += myreaderRecieptDoctorFeesDetails.Item("roundeddoctorfees").ToString
-                    xFinalDoctorFeesProcess = xBeforeDoctorFeesProcess - xAfterDoctorFeesProcess
-                End While
-                xCon1.Close()
-
-
-                Dim xRecieptDoctorFeesUpdateQry As String = "update ReceiptDoctorFeesDetails set  doctorfees=ROUND((doctorfees - " + xPercentageValue1.ToString + " * doctorfees) / 25, 0) * 25  WHERE IPNo ='" + xIpNo + "' and (doctorname='Dr. Meena' OR doctorname='Dr. Ramalaksmi' OR doctorname='Dr. Laksmanan')"
-                xCon1.Open()
-                Dim sqlcmdRecieptDoctorFeesUpdate As New SqlCommand(xRecieptDoctorFeesUpdateQry, xCon1)
-                Dim myreaderRecieptDoctorFeesUpdate As SqlDataReader
-                myreaderRecieptDoctorFeesUpdate = sqlcmdRecieptDoctorFeesUpdate.ExecuteReader()
-                xCon1.Close()
-
-      
-
-                Dim xRecieptDoctorFeesTotExpUpdateQry As String = "update  ReceiptDetails set totalexpense=totalexpense-" + xFinalDoctorFeesProcess.ToString + " WHERE IPNo='" + xIpNo + "'"
-                xCon1.Open()
-                Dim sqlcmdRecieptDoctorFeesTotExpUpdate As New SqlCommand(xRecieptDoctorFeesTotExpUpdateQry, xCon1)
-                Dim myreaderRecieptDoctorFeesTotExpUpdate As SqlDataReader
-                myreaderRecieptDoctorFeesTotExpUpdate = sqlcmdRecieptDoctorFeesTotExpUpdate.ExecuteReader()
-                xCon1.Close()
-
+            'Dim Adpt As New SqlDataAdapter(com, xCon)
+            xCon.Open()
+            Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
+            Dim myreader As SqlDataReader
+            myreader = sqlcmd.ExecuteReader()
+            While myreader.Read()
                 xFinalDoctorFeesProcess = 0
                 xBeforeDoctorFeesProcess = 0
                 xAfterDoctorFeesProcess = 0
-
-                Dim xRecieptParticularsFeesDetailsQry As String = "SELECT ipno,particulars,Fees, ROUND((Fees - " + xPercentageValue1.ToString + " * Fees) / 25, 0) * 25 AS roundedfees FROM ReceiptFeesDetails WHERE IPNo ='" + xIpNo + "'"
-                xCon1.Open()
-
-                Dim sqlcmdRecieptParticularsFeesDetails As New SqlCommand(xRecieptParticularsFeesDetailsQry, xCon1)
-                Dim myreaderRecieptParticularsFeesDetails As SqlDataReader
-                myreaderRecieptParticularsFeesDetails = sqlcmdRecieptParticularsFeesDetails.ExecuteReader()
-
-                While myreaderRecieptParticularsFeesDetails.Read()
-                    xBeforeParticularsFeesProcess += myreaderRecieptParticularsFeesDetails.Item("fees").ToString
-                    xAfterParticularsFeesProcess += myreaderRecieptParticularsFeesDetails.Item("roundedfees").ToString
-                    xFinalParticularFeesProcess = xBeforeParticularsFeesProcess - xAfterParticularsFeesProcess
-                End While
-                xCon1.Close()
-
-
-                Dim xRecieptParticularFeesUpdateQry As String = "update  ReceiptFeesDetails set fees=ROUND((Fees - " + xPercentageValue1.ToString + " * Fees) / 25, 0) * 25   WHERE IPNo ='" + xIpNo + "'"
-                xCon1.Open()
-                Dim sqlcmdRecieptParticularFeesUpdate As New SqlCommand(xRecieptParticularFeesUpdateQry, xCon1)
-                Dim myreaderRecieptParticularFeesUpdate As SqlDataReader
-                myreaderRecieptParticularFeesUpdate = sqlcmdRecieptParticularFeesUpdate.ExecuteReader()
-                xCon1.Close()
-
-    
-                Dim xRecieptParticularsTotExpUpdateQry As String = "update  ReceiptDetails set totalexpense=totalexpense-" + xFinalParticularFeesProcess.ToString + " WHERE IPNo='" + xIpNo + "'"
-                xCon1.Open()
-                Dim sqlcmdRecieptParticularsTotExpUpdate As New SqlCommand(xRecieptParticularsTotExpUpdateQry, xCon1)
-                Dim myreaderRecieptParticularsTotExpUpdate As SqlDataReader
-                myreaderRecieptParticularsTotExpUpdate = sqlcmdRecieptParticularsTotExpUpdate.ExecuteReader()
-                xCon1.Close()
                 xFinalParticularFeesProcess = 0
                 xBeforeParticularsFeesProcess = 0
                 xAfterParticularsFeesProcess = 0
-            End If
-        End While
-        rchBeforeDoctorFees.Text = ""
-        rchAfterDoctorFees.Text = ""
-        xCon.Close()
-    End Sub
+                Dim xIpNo As String = myreader.Item("ipno").ToString
+                Dim xReceiptNumber As String
+                xReceiptNumber = ""
+                Dim xCheckClaimBillQry As String = "SELECT ReceiptNumber FROM ReceiptDetails WHERE IPNo ='" + xIpNo + "' and claimbill='n'"
+                xCon1.Open()
+                Dim sqlcmdReceiptNumber As New SqlCommand(xCheckClaimBillQry, xCon1)
+                Dim myreaderReceiptNumber As SqlDataReader
+                myreaderReceiptNumber = sqlcmdReceiptNumber.ExecuteReader()
+                While myreaderReceiptNumber.Read()
+                    xReceiptNumber = myreaderReceiptNumber.Item("ReceiptNumber").ToString
+                End While
+                xCon1.Close()
+                If xReceiptNumber <> "" Then
+
+                    xPercentageValue = txtPercentage.Text.ToString
+                    xPercentageValue1 = xPercentageValue / 100
+
+                    Dim xRecieptDoctorFeesDetailsQry As String = "SELECT ipno,doctorfees, ROUND((doctorfees - " + xPercentageValue1.ToString + " * doctorfees) / 25, 0) * 25 AS roundeddoctorfees FROM ReceiptDoctorFeesDetails WHERE IPNo ='" + xIpNo + "' and (doctorname='Dr. Meena' OR doctorname='Dr. Ramalaksmi' OR doctorname='Dr. Laksmanan')"
+                    xCon1.Open()
+                    Dim sqlcmdRecieptDoctorFeesDetails As New SqlCommand(xRecieptDoctorFeesDetailsQry, xCon1)
+                    Dim myreaderRecieptDoctorFeesDetails As SqlDataReader
+                    myreaderRecieptDoctorFeesDetails = sqlcmdRecieptDoctorFeesDetails.ExecuteReader()
+                    While myreaderRecieptDoctorFeesDetails.Read()
+                        xBeforeDoctorFeesProcess += myreaderRecieptDoctorFeesDetails.Item("doctorfees").ToString
+                        xAfterDoctorFeesProcess += myreaderRecieptDoctorFeesDetails.Item("roundeddoctorfees").ToString
+                        xFinalDoctorFeesProcess = xBeforeDoctorFeesProcess - xAfterDoctorFeesProcess
+                    End While
+                    xCon1.Close()
 
 
-    Private Sub ShowOtherDoctorFees()
-        Dim xDoctorFees As Integer
-        rchDoctorFees.Text = ""
-        xDoctorFees = 0
-        Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
-        & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
-        xBeforeDoctorFeesProcess = 0
-        xAfterDoctorFeesProcess = 0
-        xCon.Open()
-        Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
-        Dim myreader As SqlDataReader
-        myreader = sqlcmd.ExecuteReader()
-        While myreader.Read()
+                    Dim xRecieptDoctorFeesUpdateQry As String = "update ReceiptDoctorFeesDetails set  doctorfees=ROUND((doctorfees - " + xPercentageValue1.ToString + " * doctorfees) / 25, 0) * 25  WHERE IPNo ='" + xIpNo + "' and (doctorname='Dr. Meena' OR doctorname='Dr. Ramalaksmi' OR doctorname='Dr. Laksmanan')"
+                    xCon1.Open()
+                    Dim sqlcmdRecieptDoctorFeesUpdate As New SqlCommand(xRecieptDoctorFeesUpdateQry, xCon1)
+                    Dim myreaderRecieptDoctorFeesUpdate As SqlDataReader
+                    myreaderRecieptDoctorFeesUpdate = sqlcmdRecieptDoctorFeesUpdate.ExecuteReader()
+                    xCon1.Close()
 
 
-            Dim xIpNo As String = myreader.Item("ipno").ToString
-            Dim xRecieptDoctorFeesDetailsQry As String = "SELECT ipno,doctorfees FROM ReceiptDoctorFeesDetails WHERE IPNo='" + xIpNo + "' and doctorname!='Dr. Meena' and doctorname!='Dr. Ramalaksmi' and doctorname!='Dr. Laksmanan'"
-            xCon1.Open()
 
-            Dim sqlcmd1 As New SqlCommand(xRecieptDoctorFeesDetailsQry, xCon1)
-            Dim myreader1 As SqlDataReader
-            myreader1 = sqlcmd1.ExecuteReader()
-            While myreader1.Read()
-                xDoctorFees += myreader1.Item("doctorfees").ToString
-                rchDoctorFees.Text += myreader1.Item("ipno").ToString + "-" + myreader1.Item("doctorfees").ToString + Environment.NewLine
+                    Dim xRecieptDoctorFeesTotExpUpdateQry As String = "update  ReceiptDetails set totalexpense=totalexpense-" + xFinalDoctorFeesProcess.ToString + " WHERE IPNo='" + xIpNo + "'"
+                    xCon1.Open()
+                    Dim sqlcmdRecieptDoctorFeesTotExpUpdate As New SqlCommand(xRecieptDoctorFeesTotExpUpdateQry, xCon1)
+                    Dim myreaderRecieptDoctorFeesTotExpUpdate As SqlDataReader
+                    myreaderRecieptDoctorFeesTotExpUpdate = sqlcmdRecieptDoctorFeesTotExpUpdate.ExecuteReader()
+                    xCon1.Close()
+
+                    xFinalDoctorFeesProcess = 0
+                    xBeforeDoctorFeesProcess = 0
+                    xAfterDoctorFeesProcess = 0
+
+                    Dim xRecieptParticularsFeesDetailsQry As String = "SELECT ipno,particulars,Fees, ROUND((Fees - " + xPercentageValue1.ToString + " * Fees) / 25, 0) * 25 AS roundedfees FROM ReceiptFeesDetails WHERE IPNo ='" + xIpNo + "' and Fees>0"
+                    xCon1.Open()
+
+                    Dim sqlcmdRecieptParticularsFeesDetails As New SqlCommand(xRecieptParticularsFeesDetailsQry, xCon1)
+                    Dim myreaderRecieptParticularsFeesDetails As SqlDataReader
+                    myreaderRecieptParticularsFeesDetails = sqlcmdRecieptParticularsFeesDetails.ExecuteReader()
+
+                    While myreaderRecieptParticularsFeesDetails.Read()
+                        xBeforeParticularsFeesProcess += myreaderRecieptParticularsFeesDetails.Item("fees").ToString
+                        xAfterParticularsFeesProcess += myreaderRecieptParticularsFeesDetails.Item("roundedfees").ToString
+                        xFinalParticularFeesProcess = xBeforeParticularsFeesProcess - xAfterParticularsFeesProcess
+                    End While
+                    xCon1.Close()
+
+
+                    Dim xRecieptParticularFeesUpdateQry As String = "update  ReceiptFeesDetails set fees=ROUND((Fees - " + xPercentageValue1.ToString + " * Fees) / 25, 0) * 25   WHERE IPNo ='" + xIpNo + "' and Fees>0"
+                    xCon1.Open()
+                    Dim sqlcmdRecieptParticularFeesUpdate As New SqlCommand(xRecieptParticularFeesUpdateQry, xCon1)
+                    Dim myreaderRecieptParticularFeesUpdate As SqlDataReader
+                    myreaderRecieptParticularFeesUpdate = sqlcmdRecieptParticularFeesUpdate.ExecuteReader()
+                    xCon1.Close()
+
+
+                    Dim xRecieptParticularsTotExpUpdateQry As String = "update  ReceiptDetails set totalexpense=totalexpense-" + xFinalParticularFeesProcess.ToString + " WHERE IPNo='" + xIpNo + "'"
+                    xCon1.Open()
+                    Dim sqlcmdRecieptParticularsTotExpUpdate As New SqlCommand(xRecieptParticularsTotExpUpdateQry, xCon1)
+                    Dim myreaderRecieptParticularsTotExpUpdate As SqlDataReader
+                    myreaderRecieptParticularsTotExpUpdate = sqlcmdRecieptParticularsTotExpUpdate.ExecuteReader()
+                    xCon1.Close()
+                    xFinalParticularFeesProcess = 0
+                    xBeforeParticularsFeesProcess = 0
+                    xAfterParticularsFeesProcess = 0
+                End If
             End While
-            xCon1.Close()
-        End While
-        lblDoctorFees.Text = xDoctorFees
-        xCon.Close()
+            rchBeforeDoctorFees.Text = ""
+            rchAfterDoctorFees.Text = ""
+            xCon.Close()
+        End If
     End Sub
+
+
+    'Private Sub ShowOtherDoctorFees()
+    '    Dim xDoctorFees As Integer
+    '    rchDoctorFees.Text = ""
+    '    xDoctorFees = 0
+    '    Dim xDischargeQry As String = "SELECT ipno FROM AdmissionDetails " _
+    '    & " WHERE (DischargeDateTime >= '" + dtpfromDate.Text + "' and DischargeDateTime <= '" + dtptoDate.Text + "')"
+    '    xBeforeDoctorFeesProcess = 0
+    '    xAfterDoctorFeesProcess = 0
+    '    xCon.Open()
+    '    Dim sqlcmd As New SqlCommand(xDischargeQry, xCon)
+    '    Dim myreader As SqlDataReader
+    '    myreader = sqlcmd.ExecuteReader()
+    '    While myreader.Read()
+
+
+    '        Dim xIpNo As String = myreader.Item("ipno").ToString
+    '        Dim xRecieptDoctorFeesDetailsQry As String = "SELECT ipno,doctorfees FROM ReceiptDoctorFeesDetails WHERE IPNo='" + xIpNo + "' and doctorname!='Dr. Meena' and doctorname!='Dr. Ramalaksmi' and doctorname!='Dr. Laksmanan'"
+    '        xCon1.Open()
+
+    '        Dim sqlcmd1 As New SqlCommand(xRecieptDoctorFeesDetailsQry, xCon1)
+    '        Dim myreader1 As SqlDataReader
+    '        myreader1 = sqlcmd1.ExecuteReader()
+    '        While myreader1.Read()
+    '            xDoctorFees += myreader1.Item("doctorfees").ToString
+    '            rchDoctorFees.Text += myreader1.Item("ipno").ToString + "-" + myreader1.Item("doctorfees").ToString + Environment.NewLine
+    '        End While
+    '        xCon1.Close()
+    '    End While
+    '    lblDoctorFees.Text = xDoctorFees
+    '    xCon.Close()
+    'End Sub
 
     Private Sub ShowRoomAmount()
         Dim xTotalRoomRent As Integer = 0
@@ -396,7 +400,7 @@ Public Class DoctorFees
     End Sub
 
 
- 
+
     Private Sub btnfinalProcessShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnfinalProcessShow.Click
         rchFinalProcess.Text = ""
         rchFinalProcess.Text += "IPNO ADVANCE  EXPENSE" + Environment.NewLine
@@ -429,7 +433,7 @@ Public Class DoctorFees
 
     End Sub
 
-  
+
     Private Sub btnFinalProcess_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFinalProcess.Click
         rchFinalProcess.Text = ""
         Dim xAdvanceTotal As Integer = 0
@@ -454,21 +458,21 @@ Public Class DoctorFees
                 xTotalExpense = myreader2.Item("totalexpense").ToString
                 xTotal = xAdvanceTotal - xTotalExpense
                 If xAdvanceTotal > xTotalExpense Then
-                    Dim xRecieptStatusUpdateQry As String = "update  ReceiptDetails set returnorpaidstatus='R' , total=totalexpense-advancetotal WHERE IPNo ='" + xIpNo + "'"
+                    Dim xRecieptStatusUpdateQry As String = "update  ReceiptDetails set returnorpaidstatus='R' , total=totalexpense-advancetotal-lessamount WHERE IPNo ='" + xIpNo + "'"
                     xCon2.Open()
                     Dim sqlcmdRecieptStatusUpdate As New SqlCommand(xRecieptStatusUpdateQry, xCon2)
                     Dim myreaderRecieptStatusUpdate As SqlDataReader
                     myreaderRecieptStatusUpdate = sqlcmdRecieptStatusUpdate.ExecuteReader()
                     xCon2.Close()
                 ElseIf xAdvanceTotal = xTotalExpense Then
-                    Dim xRecieptStatusUpdateQry As String = "update  ReceiptDetails set returnorpaidstatus='N' WHERE IPNo ='" + xIpNo + "'"
+                    Dim xRecieptStatusUpdateQry As String = "update  ReceiptDetails set returnorpaidstatus='N', total=totalexpense-advancetotal-lessamount WHERE IPNo ='" + xIpNo + "'"
                     xCon2.Open()
                     Dim sqlcmdRecieptStatusUpdate As New SqlCommand(xRecieptStatusUpdateQry, xCon2)
                     Dim myreaderRecieptStatusUpdate As SqlDataReader
                     myreaderRecieptStatusUpdate = sqlcmdRecieptStatusUpdate.ExecuteReader()
                     xCon2.Close()
                 Else
-                    Dim xRecieptStatusUpdateQry As String = "update  ReceiptDetails set total=totalexpense-advancetotal WHERE IPNo ='" + xIpNo + "'"
+                    Dim xRecieptStatusUpdateQry As String = "update  ReceiptDetails set total=totalexpense-advancetotal-lessamount WHERE IPNo ='" + xIpNo + "'"
                     xCon2.Open()
                     Dim sqlcmdRecieptStatusUpdate As New SqlCommand(xRecieptStatusUpdateQry, xCon2)
                     Dim myreaderRecieptStatusUpdate As SqlDataReader
